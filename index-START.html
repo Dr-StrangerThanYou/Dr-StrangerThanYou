@@ -70,17 +70,21 @@
     }));
 
   window.addEventListener('keydown', e=>{
+    if(e.repeat) return;
+    
     let ndx = e.keyCode;
     let key = document.querySelector(`div[data-key="${ndx}"]`)
     if(!key) return
 
     key.classList.add('playing');
     sounds[ndx].currentTime = 0;
+    // Resetting the pointer does not by itself stop playback.
     if(!sounds[ndx].isPlaying) sounds[ndx].play();
   })
 
-/* A second go after watching the video.
-
+/* A third go after:
+  if(e.repeat) return;
+    Keeps the style from locking into place. 
 
  */ 
 
