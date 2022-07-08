@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS + CSS Clock</title>
+</head>
+<body>
+
+
+    <div class="clock">
+      <div class="clock-face">
+        <div class="hand hour-hand" style="background-color: rgb(235, 112, 112)"></div>
+        <div class="hand min-hand" style="background-color: rgb(69, 134, 15)"></div>
+        <div class="hand second-hand" style="background-color: rgb(71, 29, 31)"></div>
+        <!-- <div class="hand millis" style="width: 32%; transform: translateX(57%); background-color: yellowgreen; box-shadow: 2px 2px 7px 3px  rgba(255,255,255,.4)"></div> -->
+      </div>
+    </div>
+
+
+  <style>
+    html {
+      background: #1d1f20 /* url(https://unsplash.it/1500/1000?image=881&blur=5) */;
+      background-size: cover;
+      font-family: 'helvetica neue';
+      text-align: center;
+      font-size: 10px;
+    }
+
+    body {
+      margin: 0;
+      font-size: 2rem;
+      display: flex;
+      flex: 1;
+      min-height: 100vh;
+      align-items: center;
+    }
+
+    .clock {
+      width: 30rem;
+      height: 30rem;
+      border: 20px solid white;
+      border-radius: 50%;
+      margin: 50px auto;
+      position: relative;
+      padding: 2rem;
+      box-shadow:
+        0 0 0 4px rgba(0,0,0,0.1),
+        inset 0 0 0 3px #EFEFEF,
+        inset 0 0 10px black,
+        0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .clock-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform: translateY(-3px); /* account for the height of the clock hands */
+    }
+
+    .hand {
+      width: 50%;
+      height: 6px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.68s ease;
+      
+    }
+
+  </style>
+
+  <script>
+    const secondHand = document.querySelector('.second-hand');
+    const minuteHand = document.querySelector('.min-hand');
+    const hourHand = document.querySelector('.hour-hand');
+    //const milliHand = document.querySelector('.millis')
+
+    let timer = [0, 0, 0, 0]
+    let angles = [90, 90, 90, 0]
+    let values = [(1 / 12) * 360, (1 / 60) * 360, (1 / 60) * 360, (360/1000) * 360]
+
+    const getTick = ()=>{
+      let t = new Date()
+      //console.log(t.getMilliseconds())
+      return {s: t.getSeconds(), m: t.getMinutes(), h: t.getHours(), ms: t.getMilliseconds()}
+    }
+
+    (()=>{
+      let g = getTick();
+      console.log(g)
+
+      //timer[3] = g.ms;
+      //angles[3] += (g.ms / 1000) * 360
+
+      timer[2] = g.s;
+      angles[2] += (g.s / 60) * 360
+
+      timer[1] = g.m;
+      angles[1] += (g.m / 60) * 360
+
+      timer[0] = g.h;
+      angles[0] += (g.h / 12) * 360
+    })()
+
+    function run(){
+      let g = getTick()
+
+      //if(timer[3] !== g.ms) { angles[3] += values[3]; timer[3] = g.ms;}
+      //milliHand.style.transform = `rotate(${angles[3]}deg)`
+
+      if(timer[2] !== g.s) { angles[2] += values[2]; timer[2] = g.s;}
+      secondHand.style.transform = `rotate(${angles[2]}deg)`
+
+      if(timer[1] !== g.m) { angles[1] += values[1]; timer[1] = g.m;}
+      minuteHand.style.transform = `rotate(${angles[1]}deg)`
+
+      if(timer[0] !== g.h) { angles[0] += values[0]; timer[0] = g.h;}
+      hourHand.style.transform = `rotate(${angles[0]}deg)`
+
+      requestAnimationFrame(run)
+    }
+
+    run()
+  </script>
+</body>
+</html>
