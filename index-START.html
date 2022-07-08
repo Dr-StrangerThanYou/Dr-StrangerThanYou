@@ -58,6 +58,40 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  // Setup: Extract data
+  let keys = []
+  let pagedata = document.querySelectorAll('.key');
+  for(item of pagedata){ keys.push(+item.dataset.key) }
+
+  // Listen for key
+  document.addEventListener('keydown', evt=>{
+    if(keys.indexOf(evt.keyCode) > -1){
+      document.querySelector(`div[data-key='${evt.keyCode}'`).classList.add('playing')
+      let sound = document.querySelector(`audio[data-key='${evt.keyCode}']`)
+      sound.currentTime = 0
+      sound.play()
+      setTimeout(()=>document.querySelector(`div[data-key='${evt.keyCode}'`).classList.remove('playing'), 70)
+    }
+  })
+  // Placing the individual audio items into an array and playing by index
+  //   would likely be more performant, but this does work plenty fast enough
+
+  // Referenced: W3WSchools for audio tag usage.
+  
+  /* Comparitive Analysis
+     - keys being global, alright
+     - never even heard of the transitioned event... look into it.
+     - the setTimeout call seems to be a little bit of overkill.
+       It works, but it's bulky and will create some thrashing...
+     - I tested the array for a value inclusion [ O(n)]
+     - The example just grabs the item from the page, and 
+         quitely fails if it cannot find a matching element...
+         : Mixed emotions : I know precisely how many items I need to test, 
+         however the dom being referenced like crazy and optimized by smart people
+         using hashes or better would yield [ O(1) ]... Again, look into it
+  */
+
+  // KeyData: Quick one off reference tool: 
 
 </script>
 
